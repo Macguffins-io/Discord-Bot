@@ -1,0 +1,19 @@
+{
+  "name": "discord-bot-template",
+  "version": "1.0.0",
+  "description": "generic template for a discord bot",
+  "main": "src/app.js",
+  "scripts": {
+    "test": ""
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "template"
+  ],
+  "author": "Christopher-Law",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.1.1"
+  }
+}

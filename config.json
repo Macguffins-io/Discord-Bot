@@ -1,0 +1,11 @@
+{
+    "prefix" : "!",
+
+	"events":
+    [
+        {
+            "type": "message",
+            "router" : "MessageCommandRouter"
+        }
+    ]
+}
