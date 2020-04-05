@@ -2,33 +2,60 @@
  * Entry Point for Application
  */
 
-//Use discord.js 
+// For filesystem access
+const fs = require('fs');
+
+// Use discord.js as a framework
 const Discord = require("discord.js");
 
-//Bot Instance
+// For our storage solution
+const Keyv = require("keyv");
+
+// Create the Bot Instance
 const bot = new Discord.Client();
 
-//Get Bot Token
-const { token } = require("../secrets.json");
+// Get Bot Token and private settings
+const { token, storage } = require("../secrets.json");
 
-//Get Events we want to subscribe to
-const { events } = require("../config.json");
+// Get configuration like prefix and events
+const { prefix, events } = require("../config.json");
 
-//Event Dispatcher that will take the events we want, and farm them out to the respective services
- const EventDispatcherService = require('./services/EventDispatcherService.js');
+// Event Dispatcher that will take the events we want, and farm them out to the respective services
+const EventDispatcherService = require('./services/EventDispatcherService.js');
 
-//Lets go
- bot.login(token).then( tokenConfirmation => {
+// Lets go
+bot.login(token).then( tokenConfirmation => {
 
-         if (tokenConfirmation === token){
+    if (tokenConfirmation === token){
+        // Prepare the commands for the client
+        bot.commands = new Discord.Collection();
+        const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
+        for (const file of commandFiles) {
+            const command = require(`./commands/${file}`);
+            console.log("Added command: " + file);
+            bot.commands.set(command.name, command);
+        }
 
-             const eventDispatcher = new EventDispatcherService();
-             eventDispatcher.registerBotForEvents(bot, events);
+        // Prepare bot storage
+        if(['redis','sqlite'].indexOf(storage.type) >= 0) {
+            bot.storage = new Keyv(`${storage.type}://${storage.user}:${storage.pass}@${storage.host}:${storage.port}`)
+            console.log("Storage set to: " + storage.type);
+        } else {
+            bot.storage = new Keyv();
+            console.log("Storage set to: local");
+        }
 
-         } else {
-             throw "Unable to log bot into Discord. Tokens did not match";
-         }
-     }
- ).catch( err => {
+        // Prepare bot prefix
+        bot.prefix = prefix;
+        console.log("Prefix set to: " + prefix);
+
+        const eventDispatcher = new EventDispatcherService();
+
+        eventDispatcher.registerBotForEvents(bot, events);
+
+    } else {
+        throw "Unable to log bot into Discord. Tokens did not match";
+    }
+}).catch( err => {
     console.log(err);
- });
+});

@@ -14,6 +14,8 @@
   "author": "Christopher-Law",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^12.1.1"
+    "@keyv/redis": "^2.1.1",
+    "discord.js": "^12.1.1",
+    "keyv": "^4.0.0"
   }
 }

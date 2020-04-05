@@ -16,7 +16,7 @@ class EventDispatcherService{
 
 				const commandRouter = this.getEventTypeCommandRouter(event);
 
-				if (commandRouter.hydrate(bot, discordEvent, event)){
+				if (commandRouter.hydrate(bot, discordEvent)){
 					commandRouter.handleCommand();
 				}
 			} )

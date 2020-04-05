@@ -1,14 +1,10 @@
 {
-	"events":
+    "prefix": "&",
+    "events":
     [
         {
             "type": "message",
-            "router": "MessageCommandRouter",
-            "prefix": "&",
-            "commands":
-            {
-                "echo" : "EchoCommand"
-            }
+            "router": "MessageCommandRouter"
         }
     ]
 }
