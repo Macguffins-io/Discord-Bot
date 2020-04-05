@@ -2,9 +2,6 @@
  * Responsible for creating evert type router instances
  */
 
-const MessageCommandRouter  = require("../routers/MessageCommandRouter.js")
-
-
 //Routers
 const routers = require('../routers/routers');
 

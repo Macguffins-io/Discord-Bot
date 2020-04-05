@@ -2,23 +2,20 @@
  * Responsible for creating evert type router instances
  */
 
-import SpellCommand from "../commands/SpellCommand.js"
+const commands = require('../commands/commands');
 
-const commands = [
-	SpellCommand	
-];
-
-export default class CommandHandlerFactory{
+class CommandHandlerFactory{
 
 	static createInstance(commandHandler){
+		let command = null;
 
-		let handler = null;
-
-		if (commands.includes(commandHandler) ){
-
-			handler= new commandHandler();
-
-		}
-		return handler;
+		if (commands.hasOwnProperty(commandHandler)){
+            const commandClass = commands[commandHandler];
+            command = new commandClass();
+		} else {
+          throw new Error("The Command you tried to create is not part of the commands array")
+        }
+        return command;
 	}
 }
+module.exports = CommandHandlerFactory;

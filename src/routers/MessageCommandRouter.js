@@ -1,4 +1,5 @@
-const BaseRouter = require("./BaseRouter")
+const BaseRouter = require("./BaseRouter");
+const CommandHandlerFactory = require("../factories/CommandHandlerFactory");
 
 class MessageCommandRouter extends BaseRouter{
 	
@@ -9,28 +10,32 @@ class MessageCommandRouter extends BaseRouter{
 		super();
 	}
 
-	hydrate(bot,discordEvent){
+	hydrate(bot, discordEvent, config) {
 		this.bot = bot;
 		this.discordEvent = discordEvent;
+		this.config = config;
 
-		return (this.bot && this.discordEvent);
+		return (this.bot && this.discordEvent && this.config);
 	}
 	
-	handleCommand(){
+	handleCommand() {
+	    let message = this.discordEvent;
 
-		//Ignore Other Bots
-		if (this.discordEvent.author.bot === false){
+		// Ignore Other Bots
+		if (message.author.bot === true) return;
+		// Check for prefix
+		if (message.content.indexOf(this.config.prefix) !== 0) return;
 
-			/*
-				So from here, we have discordEvent that we can respond to. ( reply() / send() ),
-				but I would like to invoke another factory here that can farm out the various
-				commands that come through message events.
-			*/
-		
-			//Simple example
-			this.discordEvent.reply("Hey, nice message");
+		// Separate the query into commands plus arguments (simple)
+        const args = message.content.slice(this.config.prefix.length).trim().split(/ +/g);
+        const command = args.shift().toLowerCase();
 
-		}
+        // Stop if not a valid command
+        if (!this.config.commands.hasOwnProperty(command)) return;
+
+        const c = CommandHandlerFactory.createInstance(this.config.commands[command]);
+        c.execute(message, args);
+
 	}
 }
 

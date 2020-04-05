@@ -23,14 +23,12 @@ const { events } = require("../config.json");
          if (tokenConfirmation === token){
 
              const eventDispatcher = new EventDispatcherService();
+             eventDispatcher.registerBotForEvents(bot, events);
 
-             eventDispatcher.registerBotForEvents(bot,events);
-
-         }else {
+         } else {
              throw "Unable to log bot into Discord. Tokens did not match";
          }
      }
  ).catch( err => {
-    console.log(err)
-    this.exit();
+    console.log(err);
  });

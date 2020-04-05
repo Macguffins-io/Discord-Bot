@@ -8,7 +8,7 @@ const EventTypeCommandRouterFactory = require("../factories/EventTypeCommandRout
 
 class EventDispatcherService{
 	
-	registerBotForEvents(bot,events){
+	registerBotForEvents(bot, events){
 
 		for(const event of events){
 
@@ -16,7 +16,7 @@ class EventDispatcherService{
 
 				const commandRouter = this.getEventTypeCommandRouter(event);
 
-				if (commandRouter.hydrate( bot,discordEvent) ){
+				if (commandRouter.hydrate(bot, discordEvent, event)){
 					commandRouter.handleCommand();
 				}
 			} )
