@@ -28,11 +28,17 @@ class MessageCommandRouter extends BaseRouter{
         const args = message.content.slice(this.bot.prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
 
-        // Stop if not a valid command
-        if (!this.bot.commands.has(command)) return;
+        // Find valid command and stop if none found
+        const c = this.bot.commands.get(command)
+            || this.bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command));
+        if (!c) return;
 
         try {
-            this.bot.commands.get(command).execute(message, args);
+            if(c.guildOnly && message.channel.type !== 'text') {
+                return message.reply("Please run that command in a server.")
+            }
+
+            c.execute(message, args)
         } catch (error) {
             console.error(error);
             message.reply("There was a problem trying to execute that command!");
