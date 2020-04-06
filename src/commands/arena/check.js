@@ -16,12 +16,15 @@ module.exports = {
                 if(queue === undefined) {
                     queue = [];
                 }
-                if(queue.find(q => q.userID === member.id)) {
-                    message.channel.send(member.displayName + " is already in the queue!");
+
+                const qi = 1+queue.findIndex(g => g.members.find(m => m.userID === member.id));
+                if(qi > 0) {
+                    message.channel.send(`${member.displayName} is number ${qi} in queue.`);
                     return;
                 }
 
-                queue.push(member);
+                const type = args.length && args[0] === 'solo' ? 'solo' : 'team';
+                queue.push({ members: [member], type: type });
 
                 message.bot.storage.set('queue', queue)
                     .then(() => {

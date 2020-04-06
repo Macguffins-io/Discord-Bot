@@ -21,15 +21,23 @@ module.exports = {
                     return;
                 }
 
-                data = ["**Queue**"];
-                let i = 1;
-                for(const q of queue) {
-                    const member = message.guild.member(q.userID);
-                    const roles = member.roles.cache.find(r => r.name.startsWith("Level"));
-                    const level = roles ? roles.name : "N/A";
-                    data.push([i.toString() + ". " + member.displayName, level].join(" - "));
-                    i++;
-                }
+                data = ["**Colosseum Queue**"];
+                data.push(
+                    queue.map((q, i) => {
+                        return `${i+1}. ` + q.members.map(m => {
+                            const member = message.guild.member(m.userID);
+                            const role = member.roles.cache.find(r => r.name.startsWith("Level"));
+                            const level = role ? role.name : "N/A";
+
+                            return [
+                                q.name,
+                                member.displayName,
+                                `[${level}]`,
+                                (q.type === 'solo' ? '*SOLO*' : null)
+                            ].filter(x => !!x).join(' ');
+                        }).join(', ')
+                    }).join("\n")
+                );
                 data.push("\nType `&check` to add yourself to the queue!");
                 message.channel.send(data.join("\n"));
             });

@@ -17,13 +17,15 @@ module.exports = {
                     queue = [];
                 }
 
-                const i = queue.findIndex(q => q.userID === member.id);
-                if(i < 0) {
+                const qi = queue.findIndex(g => g.members.find(m => m.userID === member.id));
+                if(qi < 0) {
                     message.channel.send(member.displayName + " is not in the queue!");
                     return;
                 }
 
-                queue.splice(i, 1);
+                const gi = queue[qi].members.findIndex(m => m.userID === member.id);
+                queue[qi].members.splice(queue[qi].members[gi], 1);
+                queue = queue.filter(g => g.members.length > 0);
 
                 message.bot.storage.set('queue', queue)
                     .then(() => {
