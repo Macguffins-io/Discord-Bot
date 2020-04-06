@@ -34,10 +34,15 @@ class MessageCommandRouter extends BaseRouter{
         if (!c) return;
 
         try {
+            // Verify this is in the server
             if(c.guildOnly && message.channel.type !== 'text') {
                 return message.reply("Please run that command in a server.")
             }
 
+            // Check if the correct channel
+            if(c.channel && message.channel.name !== c.channel) return;
+
+            message.bot = this.bot;
             c.execute(message, args)
         } catch (error) {
             console.error(error);

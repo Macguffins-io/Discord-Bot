@@ -37,8 +37,11 @@ bot.login(token).then( tokenConfirmation => {
         }
 
         // Prepare bot storage
-        if(['redis','sqlite'].indexOf(storage.type) >= 0) {
+        if(storage.type === 'redis') {
             bot.storage = new Keyv(`${storage.type}://${storage.user}:${storage.pass}@${storage.host}:${storage.port}`)
+            console.log("Storage set to: " + storage.type);
+        } else if(storage.type === 'sqlite') {
+            bot.storage = new Keyv(`${storage.type}://${storage.path}`);
             console.log("Storage set to: " + storage.type);
         } else {
             bot.storage = new Keyv();
@@ -49,8 +52,8 @@ bot.login(token).then( tokenConfirmation => {
         bot.prefix = prefix;
         console.log("Prefix set to: " + prefix);
 
+        // Use the dispatcher to generate events
         const eventDispatcher = new EventDispatcherService();
-
         eventDispatcher.registerBotForEvents(bot, events);
 
     } else {

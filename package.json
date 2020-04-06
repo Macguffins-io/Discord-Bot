@@ -15,7 +15,9 @@
   "license": "MIT",
   "dependencies": {
     "@keyv/redis": "^2.1.1",
+    "@keyv/sqlite": "^2.0.2",
     "discord.js": "^12.1.1",
-    "keyv": "^4.0.0"
+    "keyv": "^4.0.0",
+    "sqlite3": "^4.1.1"
   }
 }
