@@ -4,6 +4,7 @@
  */
 module.exports = {
     name: 'queue',
+    category: 'arena',
     description: 'See the arena queue when in #arena-queue',
     guildOnly: true,
     deleteMessage: true,

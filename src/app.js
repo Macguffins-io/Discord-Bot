@@ -29,7 +29,9 @@ bot.login(token).then( tokenConfirmation => {
     if (tokenConfirmation === token){
         // Prepare the commands for the client
         bot.commands = new Discord.Collection();
-        const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
+        const commandFiles = fs.readdirSync('./src/commands', {withFileTypes: true})
+            .flatMap(f => f.isDirectory() ? fs.readdirSync('./src/commands/' + f.name).flatMap(f2 => f.name + "/" + f2) : f.name)
+            .filter(file => file.endsWith('.js'));
         for (const file of commandFiles) {
             const command = require(`./commands/${file}`);
             console.log("Added command: " + file);

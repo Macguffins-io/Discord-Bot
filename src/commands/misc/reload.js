@@ -4,6 +4,7 @@
  */
 module.exports = {
     name: 'reload',
+    category: 'misc',
     description: 'Reload a specific command source',
     usage: '<command name>',
     execute(message, args) {

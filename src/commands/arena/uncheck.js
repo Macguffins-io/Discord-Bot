@@ -4,6 +4,7 @@
  */
 module.exports = {
     name: 'uncheck',
+    category: 'arena',
     description: 'Uncheck from the arena when in #arena-queue',
     guildOnly: true,
     deleteMessage: true,

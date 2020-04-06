@@ -24,3 +24,8 @@ Coming Soon
 ## Maintainers
 
 Coming Soon
+
+## Resources
+
+* [Discord.js Docs](https://discord.js.org/#/docs/main/stable/general/welcome)
+* [Discord.js Guide](https://discordjs.guide/)

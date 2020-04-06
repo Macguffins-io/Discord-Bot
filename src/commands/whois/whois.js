@@ -7,6 +7,7 @@ module.exports = {
     description: 'Look up a character',
     usage: '<character>',
     aliases: ['who'],
+    category: 'whois',
     guildOnly: true,
     execute(message, args) {
         if(args.length === 0) {
