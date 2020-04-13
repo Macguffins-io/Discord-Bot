@@ -1,4 +1,5 @@
 const BaseRouter = require("./BaseRouter");
+const MiddlewareService = require("../../services/MiddlewareService")
 
 class MessageCommandRouter extends BaseRouter{
 	
@@ -7,14 +8,28 @@ class MessageCommandRouter extends BaseRouter{
 
 	constructor(){
 		super();
-	}
+    }
 
 	hydrate(bot, discordEvent) {
 		this.bot = bot;
 		this.discordEvent = discordEvent;
 
 		return (this.bot && this.discordEvent);
-	}
+    }
+
+    initialize(){
+
+        const data = {
+            'bot' : this.bot,
+            'discordEvent' : this.discordEvent,
+        }
+
+        const middlewareService = new MiddlewareService();
+
+        const processedData = middlewareService.processMiddleware(data)
+
+        console.log(processedData);
+    }
 	
 	handleCommand() {
 	    let message = this.discordEvent;
@@ -22,7 +37,7 @@ class MessageCommandRouter extends BaseRouter{
 		// Ignore Other Bots
 		if (message.author.bot === true) return;
 		// Check for prefix
-		if (message.content.indexOf(this.bot.prefix) !== 0) return;
+		if (message.content.startsWith(this.bot.prefix) == false) return;
 
 		// Separate the query into commands plus arguments (simple)
         const args = message.content.slice(this.bot.prefix.length).trim().split(/ +/g);

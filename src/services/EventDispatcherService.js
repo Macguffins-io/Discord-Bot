@@ -4,7 +4,9 @@
  */
 
 //factory that will dynamically generate the objects we need to determine each Command Router for each event 
-const EventTypeCommandRouterFactory = require("../factories/EventTypeCommandRouterFactory.js");
+const objectFactory = require("../factories/ObjectFactory.js");
+
+const routers = require('../routers/routers');
 
 class EventDispatcherService{
 	
@@ -14,18 +16,17 @@ class EventDispatcherService{
 
 			bot.on(event.type, (discordEvent) => {
 
-				const commandRouter = this.getEventTypeCommandRouter(event);
 
-				if (commandRouter.hydrate(bot, discordEvent)){
-					commandRouter.handleCommand();
+				const eventRouter = objectFactory.createInstance(event.router,routers);
+
+				if (eventRouter.hydrate(bot, discordEvent)){
+
+					eventRouter.initialize();
+
 				}
-			} )
+			})
 		}
 	}
-	getEventTypeCommandRouter(event){
-		return  EventTypeCommandRouterFactory.createInstance(event);
-	}
-
 }
 
 module.exports = EventDispatcherService;
