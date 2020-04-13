@@ -1,5 +1,5 @@
 /**
- * Responsible for creating evert type router instances
+ * Responsible for creating the objectRequested if it exists in the objectPool
  */
 
 
